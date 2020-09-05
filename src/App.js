@@ -1,7 +1,6 @@
 import React from "react";
 import moment from "moment-timezone";
 import "bootstrap/dist/css/bootstrap.css";
-import "./styles.css";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -10,7 +9,7 @@ const DAYS_OF_WEEK = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
 
 const ZONES = moment.tz.names();
@@ -37,8 +36,8 @@ export default function App() {
     // console.log({ now: now.toString() });
 
     const newWeekday = DAYS_OF_WEEK[now.weekday()];
-    const newHour = now.hour();
-    const newMinute = now.minute();
+    const newHour = now.hour().toString().padStart(2, "0");
+    const newMinute = now.minute().toString().padStart(2, "0");
 
     setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `);
   }, [weekday, time, localZone, toZone]);
@@ -112,7 +111,7 @@ export default function App() {
               </select>
             </label>
           </div>
-          {result}
+          <p>{result}</p>
         </div>
       </div>
     </div>
