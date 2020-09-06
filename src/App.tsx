@@ -20,19 +20,34 @@ type Props = {
   history: History
 }
 
-export default function App({ history }: Props) {
-  const [fromTZ, setLocalZone] = React.useState(() => {
+function useTzFromSearch<T>(history: History, key: string) {
+  return React.useState(() => {
     const { search } = history.location
     const parsed = parse(search)
-    console.log({ parsed })
-    const validTz = moment.tz.zone(parsed.fromTZ as string)
+    const validTz = moment.tz.zone(parsed[key] as string)
 
     return validTz ? validTz.name : moment.tz.guess()
   })
-  const [toTZ, setToZone] = React.useState(() => moment.tz.guess())
+}
 
-  const [weekday, setWeekday] = React.useState("0")
-  const [time, setTime] = React.useState("08:30")
+function useStringFromSearch(
+  history: History,
+  key: string,
+  defaultValue: string
+) {
+  return React.useState<string>(() => {
+    const { search } = history.location
+    const parsed = parse(search)
+
+    return (parsed[key] as string) || defaultValue
+  })
+}
+export default function App({ history }: Props) {
+  const [fromTZ, setFromTZ] = useTzFromSearch(history, "fromTZ")
+  const [toTZ, setToTZ] = useTzFromSearch(history, "toTZ")
+
+  const [weekday, setWeekday] = useStringFromSearch(history, "weekday", "0")
+  const [time, setTime] = useStringFromSearch(history, "time", "08:30")
   const [result, setResult] = React.useState("")
 
   React.useEffect(() => {
@@ -43,7 +58,6 @@ export default function App({ history }: Props) {
     now.seconds(0)
     now.weekday(Number(weekday))
     now.tz(toTZ)
-    // console.log({ now: now.toString() });
 
     const newWeekday = DAYS_OF_WEEK[now.weekday()]
     const newHour = now.hour().toString().padStart(2, "0")
@@ -51,7 +65,7 @@ export default function App({ history }: Props) {
 
     setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `)
 
-    const search = `?${stringify({ weekday, time, fromTZ })}`
+    const search = `?${stringify({ weekday, time, fromTZ, toTZ })}`
     history.push({ search })
   }, [history, weekday, time, fromTZ, toTZ])
 
@@ -93,7 +107,7 @@ export default function App({ history }: Props) {
               From timezone{" "}
               <select
                 value={fromTZ}
-                onChange={(ev) => setLocalZone(ev.target.value)}
+                onChange={(ev) => setFromTZ(ev.target.value)}
                 className="form-control"
               >
                 {ZONES.map((zone) => {
@@ -111,7 +125,7 @@ export default function App({ history }: Props) {
               To timezone{" "}
               <select
                 value={toTZ}
-                onChange={(ev) => setToZone(ev.target.value)}
+                onChange={(ev) => setToTZ(ev.target.value)}
                 className="form-control"
               >
                 {ZONES.map((zone) => {
