@@ -44,7 +44,7 @@ function useStringFromSearch(
 }
 export default function App({ history }: Props) {
   const [fromTZ, setFromTZ] = useTzFromSearch(history, "fromTZ")
-  const [toTZ, setToTZ] = useTzFromSearch(history, "toTZ")
+  const [toTZ, setToTZ] = React.useState(() => moment.tz.guess())
 
   const [weekday, setWeekday] = useStringFromSearch(history, "weekday", "0")
   const [time, setTime] = useStringFromSearch(history, "time", "08:30")
@@ -65,7 +65,7 @@ export default function App({ history }: Props) {
 
     setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `)
 
-    const search = `?${stringify({ weekday, time, fromTZ, toTZ })}`
+    const search = `?${stringify({ weekday, time, fromTZ })}`
     history.push({ search })
   }, [history, weekday, time, fromTZ, toTZ])
 
