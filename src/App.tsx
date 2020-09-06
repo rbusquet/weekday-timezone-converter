@@ -1,6 +1,8 @@
 import React from "react";
 import moment from "moment-timezone";
 import "bootstrap/dist/css/bootstrap.css";
+import { parse, stringify } from "query-string";
+import { History } from "history";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -14,12 +16,20 @@ const DAYS_OF_WEEK = [
 
 const ZONES = moment.tz.names();
 
-export default function App() {
-  const [localZone, setLocalZone] = React.useState(() => {
-    // TODO: get from URL
-    return moment.tz.guess();
+type Props = {
+  history: History;
+};
+
+export default function App({ history }: Props) {
+  const [fromTZ, setLocalZone] = React.useState(() => {
+    const { search } = history.location;
+    const parsed = parse(search);
+    console.log({ parsed });
+    const validTz = moment.tz.zone(parsed.fromTZ as string);
+
+    return validTz ? validTz.name : moment.tz.guess();
   });
-  const [toZone, setToZone] = React.useState(() => moment.tz.guess());
+  const [toTZ, setToZone] = React.useState(() => moment.tz.guess());
 
   const [weekday, setWeekday] = React.useState("0");
   const [time, setTime] = React.useState("08:30");
@@ -27,12 +37,12 @@ export default function App() {
 
   React.useEffect(() => {
     const [hour, minutes] = time.split(":");
-    const now = moment.tz(new Date(), localZone);
+    const now = moment.tz(new Date(), fromTZ);
     now.hours(Number(hour));
     now.minute(Number(minutes));
     now.seconds(0);
-    now.weekday(weekday);
-    now.tz(toZone);
+    now.weekday(Number(weekday));
+    now.tz(toTZ);
     // console.log({ now: now.toString() });
 
     const newWeekday = DAYS_OF_WEEK[now.weekday()];
@@ -40,7 +50,10 @@ export default function App() {
     const newMinute = now.minute().toString().padStart(2, "0");
 
     setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `);
-  }, [weekday, time, localZone, toZone]);
+
+    const search = `?${stringify({ weekday, time, fromTZ })}`;
+    history.push({ search });
+  }, [history, weekday, time, fromTZ, toTZ]);
 
   return (
     <div className="container">
@@ -79,7 +92,7 @@ export default function App() {
             <label>
               From timezone{" "}
               <select
-                value={localZone}
+                value={fromTZ}
                 onChange={(ev) => setLocalZone(ev.target.value)}
                 className="form-control"
               >
@@ -97,7 +110,7 @@ export default function App() {
             <label>
               To timezone{" "}
               <select
-                value={toZone}
+                value={toTZ}
                 onChange={(ev) => setToZone(ev.target.value)}
                 className="form-control"
               >
