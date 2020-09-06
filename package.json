@@ -1,11 +1,8 @@
 {
-  "name": "react",
+  "name": "weekday-timezone-converter",
   "version": "1.0.0",
-  "description": "React example starter project",
-  "keywords": [
-    "react",
-    "starter"
-  ],
+  "description": "Weekday timezone converter",
+  "keywords": [],
   "main": "src/index.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
