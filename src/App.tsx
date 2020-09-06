@@ -1,8 +1,8 @@
-import React from "react";
-import moment from "moment-timezone";
-import "bootstrap/dist/css/bootstrap.css";
-import { parse, stringify } from "query-string";
-import { History } from "history";
+import React from "react"
+import moment from "moment-timezone"
+import "bootstrap/dist/css/bootstrap.css"
+import { parse, stringify } from "query-string"
+import { History } from "history"
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -12,48 +12,48 @@ const DAYS_OF_WEEK = [
   "Thursday",
   "Friday",
   "Saturday"
-];
+]
 
-const ZONES = moment.tz.names();
+const ZONES = moment.tz.names()
 
 type Props = {
-  history: History;
-};
+  history: History
+}
 
 export default function App({ history }: Props) {
   const [fromTZ, setLocalZone] = React.useState(() => {
-    const { search } = history.location;
-    const parsed = parse(search);
-    console.log({ parsed });
-    const validTz = moment.tz.zone(parsed.fromTZ as string);
+    const { search } = history.location
+    const parsed = parse(search)
+    console.log({ parsed })
+    const validTz = moment.tz.zone(parsed.fromTZ as string)
 
-    return validTz ? validTz.name : moment.tz.guess();
-  });
-  const [toTZ, setToZone] = React.useState(() => moment.tz.guess());
+    return validTz ? validTz.name : moment.tz.guess()
+  })
+  const [toTZ, setToZone] = React.useState(() => moment.tz.guess())
 
-  const [weekday, setWeekday] = React.useState("0");
-  const [time, setTime] = React.useState("08:30");
-  const [result, setResult] = React.useState("");
+  const [weekday, setWeekday] = React.useState("0")
+  const [time, setTime] = React.useState("08:30")
+  const [result, setResult] = React.useState("")
 
   React.useEffect(() => {
-    const [hour, minutes] = time.split(":");
-    const now = moment.tz(new Date(), fromTZ);
-    now.hours(Number(hour));
-    now.minute(Number(minutes));
-    now.seconds(0);
-    now.weekday(Number(weekday));
-    now.tz(toTZ);
+    const [hour, minutes] = time.split(":")
+    const now = moment.tz(new Date(), fromTZ)
+    now.hours(Number(hour))
+    now.minute(Number(minutes))
+    now.seconds(0)
+    now.weekday(Number(weekday))
+    now.tz(toTZ)
     // console.log({ now: now.toString() });
 
-    const newWeekday = DAYS_OF_WEEK[now.weekday()];
-    const newHour = now.hour().toString().padStart(2, "0");
-    const newMinute = now.minute().toString().padStart(2, "0");
+    const newWeekday = DAYS_OF_WEEK[now.weekday()]
+    const newHour = now.hour().toString().padStart(2, "0")
+    const newMinute = now.minute().toString().padStart(2, "0")
 
-    setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `);
+    setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `)
 
-    const search = `?${stringify({ weekday, time, fromTZ })}`;
-    history.push({ search });
-  }, [history, weekday, time, fromTZ, toTZ]);
+    const search = `?${stringify({ weekday, time, fromTZ })}`
+    history.push({ search })
+  }, [history, weekday, time, fromTZ, toTZ])
 
   return (
     <div className="container">
@@ -72,7 +72,7 @@ export default function App({ history }: Props) {
                     <option key={day} value={i}>
                       {day}
                     </option>
-                  );
+                  )
                 })}
               </select>
             </label>
@@ -101,7 +101,7 @@ export default function App({ history }: Props) {
                     <option key={zone} value={zone}>
                       {zone}
                     </option>
-                  );
+                  )
                 })}
               </select>
             </label>
@@ -119,7 +119,7 @@ export default function App({ history }: Props) {
                     <option key={zone} value={zone}>
                       {zone}
                     </option>
-                  );
+                  )
                 })}
               </select>
             </label>
@@ -128,5 +128,5 @@ export default function App({ history }: Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }
