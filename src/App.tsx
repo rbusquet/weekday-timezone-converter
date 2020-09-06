@@ -11,7 +11,7 @@ const DAYS_OF_WEEK = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday",
+  "Saturday"
 ];
 
 const ZONES = moment.tz.names();
