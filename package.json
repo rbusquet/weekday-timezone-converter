@@ -31,7 +31,6 @@
     "eject": "react-scripts eject",
     "publish": "gh-pages -d build"
   },
-  "homepage": "https://ricardobusquet.com/weekday-timezone-converter",
   "browserslist": [
     ">0.2%",
     "not dead",
