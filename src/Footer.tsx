@@ -12,9 +12,11 @@ const FooterComponent = styled.footer`
 export default function Footer() {
   return (
     <FooterComponent>
-      <small>
-        Created by <a href="https://rbusquet.dev">Ricardo Busquet</a>
-      </small>
+      <div className="container">
+        <small>
+          Created by <a href="https://rbusquet.dev">Ricardo Busquet</a>
+        </small>
+      </div>
     </FooterComponent>
   )
 }
