@@ -14,7 +14,7 @@ export default function Footer() {
     <FooterComponent>
       <div className="container">
         <small>
-          Created by <a href="https://rbusquet.dev">Ricardo Busquet</a>
+          Created by <a href="https://ricardobusquet.com">Ricardo Busquet</a>
         </small>
       </div>
     </FooterComponent>
