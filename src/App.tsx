@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.css"
 import { parse, stringify } from "query-string"
 import { History } from "history"
 
+import Footer from "./Footer"
+
 const DAYS_OF_WEEK = [
   "Sunday",
   "Monday",
@@ -141,6 +143,7 @@ export default function App({ history }: Props) {
           <p>{result}</p>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
