@@ -14,4 +14,4 @@ ReactDOM.render(
   rootElement
 )
 
-serviceWorkerRegistration.unregister()
+serviceWorkerRegistration.register()
