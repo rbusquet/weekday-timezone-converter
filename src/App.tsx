@@ -3,6 +3,7 @@ import moment from "moment-timezone"
 import "bootstrap/dist/css/bootstrap.css"
 import { parse, stringify } from "query-string"
 import { History } from "history"
+import TimezoneDropdown from "./TimezoneDropdown"
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -13,8 +14,6 @@ const DAYS_OF_WEEK = [
   "Friday",
   "Saturday"
 ]
-
-const ZONES = moment.tz.names()
 
 type Props = {
   history: History
@@ -63,7 +62,11 @@ export default function App({ history }: Props) {
     const newHour = now.hour().toString().padStart(2, "0")
     const newMinute = now.minute().toString().padStart(2, "0")
 
-    setResult(`Result: ${newWeekday} at ${newHour}:${newMinute} `)
+    setResult(
+      `${
+        DAYS_OF_WEEK[Number(weekday)]
+      } ${time} @ ${fromTZ} is ${newWeekday} at ${newHour}:${newMinute} @ ${toTZ}`
+    )
 
     const search = `?${stringify({ weekday, time, fromTZ })}`
     history.push({ search })
@@ -78,7 +81,7 @@ export default function App({ history }: Props) {
               Weekday{" "}
               <select
                 value={weekday}
-                onChange={(ev) => setWeekday(ev.target.value)}
+                onChange={ev => setWeekday(ev.target.value)}
                 className="form-control"
               >
                 {DAYS_OF_WEEK.map((day, i) => {
@@ -96,47 +99,25 @@ export default function App({ history }: Props) {
               Time{" "}
               <input
                 value={time}
-                onChange={(ev) => setTime(ev.target.value)}
+                onChange={ev => setTime(ev.target.value)}
                 className="form-control"
                 type="time"
               />
             </label>
           </div>
           <div className="form-group">
-            <label>
-              From timezone{" "}
-              <select
-                value={fromTZ}
-                onChange={(ev) => setFromTZ(ev.target.value)}
-                className="form-control"
-              >
-                {ZONES.map((zone) => {
-                  return (
-                    <option key={zone} value={zone}>
-                      {zone}
-                    </option>
-                  )
-                })}
-              </select>
-            </label>
+            <TimezoneDropdown
+              label="From timezone"
+              onChange={value => setFromTZ(value)}
+              value={fromTZ}
+            />
           </div>
           <div className="form-group">
-            <label>
-              To timezone{" "}
-              <select
-                value={toTZ}
-                onChange={(ev) => setToTZ(ev.target.value)}
-                className="form-control"
-              >
-                {ZONES.map((zone) => {
-                  return (
-                    <option key={zone} value={zone}>
-                      {zone}
-                    </option>
-                  )
-                })}
-              </select>
-            </label>
+            <TimezoneDropdown
+              label="To timezone"
+              onChange={value => setToTZ(value)}
+              value={toTZ}
+            />
           </div>
           <p>{result}</p>
         </div>
