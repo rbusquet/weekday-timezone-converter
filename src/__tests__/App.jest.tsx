@@ -26,7 +26,7 @@ it("shows timezone", () => {
   user.click(screen.getByRole("option", { name: /america\/los_angeles/i }))
 
   const result = screen.getByText(
-    /sunday 23:00 @ america\/new_york is sunday at 20:00 @ america\/los_angeles/i
+    /sunday, 23:00 @ america\/new_york is sunday, 20:00 @ america\/los_angeles/i
   )
   expect(result).toBeVisible()
   expect(history.location.search).toMatchInlineSnapshot(
@@ -47,7 +47,7 @@ it("if timezone 'goes back' get different weekday", () => {
   user.click(screen.getByRole("option", { name: /america\/los_angeles/i }))
 
   const result = screen.getByText(
-    /Tuesday 01:00 @ America\/New_York is Monday at 22:00 @ America\/Los_Angeles/
+    /Tuesday, 01:00 @ America\/New_York is Monday, 22:00 @ America\/Los_Angeles/
   )
   expect(result).toBeVisible()
   expect(history.location.search).toMatchInlineSnapshot(
@@ -63,12 +63,12 @@ it("if timezone 'goes in the future' get next weekday", () => {
   fireEvent.change(timeInput, { target: { value: "23:59" } })
   user.type(
     screen.getByRole("textbox", { name: /to timezone/i }),
-    "America/Los_Angeles{enter}"
+    "America/Sao_Paulo{enter}"
   )
-  user.click(screen.getByRole("option", { name: /america\/los_angeles/i }))
+  user.click(screen.getByRole("option", { name: /america\/sao_paulo/i }))
 
   const result = screen.getByText(
-    /Thursday 23:59 @ America\/New_York is Thursday at 20:59 @ America\/Los_Angeles/
+    /Thursday, 23:59 @ America\/New_York is Friday, 00:59 @ America\/Sao_Paulo/
   )
   expect(result).toBeVisible()
   expect(history.location.search).toMatchInlineSnapshot(

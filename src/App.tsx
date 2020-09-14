@@ -65,7 +65,7 @@ export default function App({ history }: Props) {
     setResult(
       `${
         DAYS_OF_WEEK[Number(weekday)]
-      } ${time} @ ${fromTZ} is ${newWeekday} at ${newHour}:${newMinute} @ ${toTZ}`
+      }, ${time} @ ${fromTZ} is ${newWeekday}, ${newHour}:${newMinute} @ ${toTZ}`
     )
 
     const search = `?${stringify({ weekday, time, fromTZ })}`
@@ -82,7 +82,7 @@ export default function App({ history }: Props) {
               <select
                 value={weekday}
                 onChange={ev => setWeekday(ev.target.value)}
-                className="form-control"
+                className="form-control custom-select"
               >
                 {DAYS_OF_WEEK.map((day, i) => {
                   return (
