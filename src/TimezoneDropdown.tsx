@@ -75,7 +75,7 @@ export default function TimezoneDropdown({ label, onChange, value }: Props) {
         className={cx("dropdown-menu", { show: isOpen })}
         style={{ maxHeight: "200px", overflowY: "auto" }}
       >
-        {!zones.length && (
+        {isOpen && !zones.length && (
           <li
             className="dropdown-item disabled"
             tabIndex={-1}
@@ -84,22 +84,23 @@ export default function TimezoneDropdown({ label, onChange, value }: Props) {
             No timezone found.
           </li>
         )}
-        {zones.map((zone, index) => (
-          <li
-            {...getItemProps({
-              key: `${zone}${index}`,
-              item: zone,
-              index,
-              className: cx("dropdown-item", {
-                active: selectedItem === zone,
-                "bg-light text-dark":
-                  selectedItem !== zone && highlightedIndex === index
-              })
-            })}
-          >
-            {zone}
-          </li>
-        ))}
+        {isOpen &&
+          zones.map((zone, index) => (
+            <li
+              {...getItemProps({
+                key: `${zone}${index}`,
+                item: zone,
+                index,
+                className: cx("dropdown-item", {
+                  active: selectedItem === zone,
+                  "bg-light text-dark":
+                    selectedItem !== zone && highlightedIndex === index
+                })
+              })}
+            >
+              {zone}
+            </li>
+          ))}
       </ul>
     </label>
   )

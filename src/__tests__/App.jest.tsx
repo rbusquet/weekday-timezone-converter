@@ -20,8 +20,13 @@ it("shows timezone", () => {
   const timeInput = screen.getByLabelText(/time$/i)
   fireEvent.change(timeInput, { target: { value: "23:00" } })
   user.type(
+    screen.getByRole("textbox", { name: /from timezone/i }),
+    "America/New_York"
+  )
+  user.click(screen.getByRole("option", { name: /america\/new_york/i }))
+  user.type(
     screen.getByRole("textbox", { name: /to timezone/i }),
-    "America/Los_Angeles{enter}"
+    "America/Los_Angeles"
   )
   user.click(screen.getByRole("option", { name: /america\/los_angeles/i }))
 
@@ -41,8 +46,13 @@ it("if timezone 'goes back' get different weekday", () => {
   const timeInput = screen.getByLabelText(/time$/i)
   fireEvent.change(timeInput, { target: { value: "01:00" } })
   user.type(
+    screen.getByRole("textbox", { name: /from timezone/i }),
+    "America/New_York"
+  )
+  user.click(screen.getByRole("option", { name: /america\/new_york/i }))
+  user.type(
     screen.getByRole("textbox", { name: /to timezone/i }),
-    "America/Los_Angeles{enter}"
+    "America/Los_Angeles"
   )
   user.click(screen.getByRole("option", { name: /america\/los_angeles/i }))
 
@@ -62,8 +72,13 @@ it("if timezone 'goes in the future' get next weekday", () => {
   const timeInput = screen.getByLabelText(/time$/i)
   fireEvent.change(timeInput, { target: { value: "23:59" } })
   user.type(
+    screen.getByRole("textbox", { name: /from timezone/i }),
+    "America/New_York"
+  )
+  user.click(screen.getByRole("option", { name: /america\/new_york/i }))
+  user.type(
     screen.getByRole("textbox", { name: /to timezone/i }),
-    "America/Sao_Paulo{enter}"
+    "America/Sao_Paulo"
   )
   user.click(screen.getByRole("option", { name: /america\/sao_paulo/i }))
 
