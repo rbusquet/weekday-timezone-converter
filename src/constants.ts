@@ -1,3 +1,3 @@
-import moment from "moment-timezone"
+import { zones } from "tzdata"
 
-export const ZONES = moment.tz.names()
+export const ZONES = Object.keys(zones)

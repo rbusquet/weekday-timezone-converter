@@ -1,9 +1,11 @@
 import React from "react"
-import moment from "moment-timezone"
+import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz"
 import "bootstrap/dist/css/bootstrap.css"
 import { parse, stringify } from "query-string"
 import { History } from "history"
 import TimezoneDropdown from "./TimezoneDropdown"
+import { ZONES } from "./constants"
+import { setDay, setHours, setMinutes, setSeconds } from "date-fns"
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -23,9 +25,11 @@ function useTzFromSearch<T>(history: History, key: string) {
   return React.useState(() => {
     const { search } = history.location
     const parsed = parse(search)
-    const validTz = moment.tz.zone(parsed[key] as string)
+    const validTz = ZONES.includes(parsed[key] as string)
 
-    return validTz ? validTz.name : moment.tz.guess()
+    return validTz
+      ? (parsed[key] as string)
+      : Intl.DateTimeFormat().resolvedOptions().timeZone
   })
 }
 
@@ -43,7 +47,9 @@ function useStringFromSearch(
 }
 export default function App({ history }: Props) {
   const [fromTZ, setFromTZ] = useTzFromSearch(history, "fromTZ")
-  const [toTZ, setToTZ] = React.useState(() => moment.tz.guess())
+  const [toTZ, setToTZ] = React.useState(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone
+  )
 
   const [weekday, setWeekday] = useStringFromSearch(history, "weekday", "0")
   const [time, setTime] = useStringFromSearch(history, "time", "08:30")
@@ -51,16 +57,18 @@ export default function App({ history }: Props) {
 
   React.useEffect(() => {
     const [hour, minutes] = time.split(":")
-    const now = moment.tz(new Date(), fromTZ)
-    now.hours(Number(hour))
-    now.minute(Number(minutes))
-    now.seconds(0)
-    now.weekday(Number(weekday))
-    now.tz(toTZ)
+    let now = new Date()
+    now = setDay(now, +weekday)
+    now = setHours(now, +hour)
+    now = setMinutes(now, +minutes)
+    now = setSeconds(now, 0)
 
-    const newWeekday = DAYS_OF_WEEK[now.weekday()]
-    const newHour = now.hour().toString().padStart(2, "0")
-    const newMinute = now.minute().toString().padStart(2, "0")
+    now = zonedTimeToUtc(now, fromTZ)
+    now = utcToZonedTime(now, toTZ)
+
+    const newWeekday = DAYS_OF_WEEK[now.getDay()]
+    const newHour = now.getHours().toString().padStart(2, "0")
+    const newMinute = now.getMinutes().toString().padStart(2, "0")
 
     setResult(
       `${
