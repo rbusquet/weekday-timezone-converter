@@ -1,0 +1,13 @@
+name: weekday-timezone-converter
+region: nyc
+static_sites:
+- build_command: npm run build
+  environment_slug: node-js
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: rbusquet/weekday-timezone-converter
+  name: weekday-timezone-converter
+  output_dir: build
+  routes:
+  - path: /
